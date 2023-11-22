@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_inventory/core/widgets/fi_appbar.dart';
+import 'package:flutter_inventory/features/home/presentation/home_page.dart';
 import 'package:flutter_inventory/features/item_list/data/models/inventory_item_model.dart';
 import 'package:flutter_inventory/features/item_list/presentation/item_list_page.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class AddItemPage extends StatefulWidget {
   const AddItemPage({super.key});
@@ -21,9 +26,12 @@ class _AddItemPageState extends State<AddItemPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: FIAppbar(title: "Add new Item",),
+      appBar: FIAppbar(
+        title: "Add new Item",
+      ),
       // TODO: Tambahkan drawer yang sudah dibuat di sini
       drawer: const Drawer(),
       body: Form(
@@ -167,47 +175,38 @@ class _AddItemPageState extends State<AddItemPage> {
                               backgroundColor:
                                   MaterialStateProperty.all(Color(0xfff0c26a)),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                items.add(InventoryItem(
-                                    name: _name,
-                                    quantity: _quantity,
-                                    category: _category,
-                                    description: _description));
-
-                                print(items);
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text(
-                                          'Produk berhasil tersimpan'),
-                                      content: SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text('Nama: $_name'),
-                                            Text('Kuantitas: $_quantity'),
-                                            Text('Deskripsi: $_description'),
-
-                                            // TODO: Munculkan value-value lainnya
-                                          ],
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          child: const Text('OK'),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                                // Kirim ke Django dan tunggu respons
+                                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                                final response = await request.postJson(
+                                    "http://10.0.2.2:8000/create-flutter/",
+                                    jsonEncode(<String, String>{
+                                      'name': _name,
+                                      'amount': _quantity.toString(),
+                                      'description': _description,
+                                      'category': _category,
+                                      // TODO: Sesuaikan field data sesuai dengan aplikasimu
+                                    }));
+                                if (response['status'] == 'success') {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content:
+                                        Text("Produk baru berhasil disimpan!"),
+                                  ));
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage()),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text(
+                                        "Terdapat kesalahan, silakan coba lagi."),
+                                  ));
+                                }
                               }
-                              _formKey.currentState!.reset();
                             },
                             child: const Text(
                               "Save",

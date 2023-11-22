@@ -1,5 +1,47 @@
 # Flutter-inventory
 
+# ==== Tugas 9 ====
+
+## 1. Apakah bisa kita melakukan pengambilan data JSON tanpa membuat model terlebih dahulu? Jika iya, apakah hal tersebut lebih baik daripada membuat model sebelum melakukan pengambilan data JSON?
+
+- Ya, kita bisa melakukan pengambilan data JSON tanpa membuat model terlebih dahulu karena pada dasarnya JSON berbentuk Map. Namun, hal tersebut tidak lebih baik dibanding membuat model terlebih dahulu, dengan membuat model terlebih dahulu proses pengambilan data dari JSON menjadi lebih efisien dan terhindar dari pekerjaan yang berulang.
+
+## 2. Jelaskan fungsi dari CookieRequest dan jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.
+
+- CookieRequest berguna sebagai pengidentifikasi / yang membantu kita dalam autentikasi pada saat melakukan Http Request ke web Django kita. Alasan CookieRequest di sebar diseluruh aplikasi adalah agar data autentikasi tersimpan pada keseluruhan aplikasi
+
+## 3. Jelaskan mekanisme pengambilan data dari JSON hingga dapat ditampilkan pada Flutter.
+
+- pertama-tama, membuat model agar pengambilan data jadi lebih mudah dan efisien. setelah itu buat objek dengan model tersebut sesuai data Map (JSON) yang diterima. Setelah itu kita bisa mengakses objek yang kita buat untuk ditampilkan kedalam tampilan flutter
+
+## 4. Jelaskan mekanisme autentikasi dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.
+
+- Untuk authentikasi flutter akan mengirim Http Request kepada Web Django menggunakan bantuan dari CookieRequest. Lalu input dari flutter yang dikirimkan oleh request tersebut akan divalidasi, dan jika berhasil akan memberikan response status login saat ini dalam format JSON. Setelah itu pada flutter mendeteksi response yang diterima, apabila responnya sukses maka akan lanjut ke menu page.
+
+## 5. Sebutkan seluruh widget yang kamu pakai pada tugas ini dan jelaskan fungsinya masing-masing.
+
+1. Scaffold() -> sebagai struktur / fondasi aplikasi
+2. SingleChildScrollView -> membuat scrollable view untuk childnya
+3. Column -> mengatur layout dalam bentuk kolom
+4. Row -> mengatur layout dalam bentuk baris
+5. Sizedbox -> sebuah kotak yang biasa digunakan untuk memberi jarak antar widget
+6. Center -> Menengahkan posisi widget
+7. Padding -> Memberikan jarak antara widget dengan item didalamnya
+8. Icon -> menampilkan Icon
+9. Text -> menampilkan text
+10. IconButton -> membuat icon yang memiliki properti onTap
+11. InkWell -> membuat sebuah widget memiliki tombol onTap ditambah dengan adanya animasi splash
+12. AppBar -> Menampilkan Appbar
+13. TextStyle -> mengatur style dari sebuah text
+14. BoxDecaroation -> memberikan decoration apda sebuah container
+15. Container -> Membungkus widget didalamnya
+16. Stack -> digunakan agar widget dapat memiliki dimensi atau memiliki efek bertumpuk
+17. Listview -> Membuat sebuah kumpulan widget yang bisa discroll baik secara vertikal maupun horizontal
+
+## 6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial).
+
+-pertama tama saya membuat model untuk membantu proses fetch data. lalu saya mengubah beberapa fungsi pada django untuk mereturn objek JSON, lalu setelah itu saya melalkukan request http ke tiap url yang menghubungkan dengan fungsi pada django. setelah itu saya menerapkan design untuk ditampilkan .
+
 # ==== Tugas 8 ====
 
 ## 1.Jelaskan perbedaan antara Navigator.push() dan Navigator.pushReplacement(), disertai dengan contoh mengenai penggunaan kedua metode tersebut yang tepat!

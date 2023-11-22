@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inventory/features/add_item/presentation/add_item_page.dart';
+import 'package:flutter_inventory/features/authentication/presentation/login_page.dart';
 import 'package:flutter_inventory/features/item_list/data/models/inventory_item_model.dart';
 import 'package:flutter_inventory/features/item_list/presentation/item_list_page.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard({
@@ -19,8 +22,10 @@ class HomeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    final request = context.watch<CookieRequest>();
+
     return InkWell(
-      onTap: () {
+      onTap: () async {
         // Memunculkan SnackBar ketika diklik
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
@@ -32,8 +37,25 @@ class HomeCard extends StatelessWidget {
         } else if (text == 'Lihat Item') {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => ItemListPage()));
-        } else {
-          //logout ntar
+        } else if (text == "Logout") {
+          final response = await request.logout(
+              // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+              "http://10.0.2.2:8000/auth/logout/");
+          String message = response["message"];
+          if (response['status']) {
+            String uname = response["username"];
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("$message Sampai jumpa, $uname."),
+            ));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("$message"),
+            ));
+          }
         }
       },
       child: Material(

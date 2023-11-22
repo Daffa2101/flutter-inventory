@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inventory/features/item_list/data/models/inventory_item_model.dart';
 import 'package:flutter_inventory/features/item_list/presentation/item_list_page.dart';
 
 class ItemCard extends StatelessWidget {
-  const ItemCard({super.key, required this.index});
+  const ItemCard({super.key, required this.items});
 
-  final int index;
+  final Fields items;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class ItemCard extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    items[index].name,
+                    items.name,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -49,14 +50,14 @@ class ItemCard extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Color(0xfff0c26a),
                         borderRadius: BorderRadius.circular(25)),
-                    child: Text('  ${items[index].category}  '),
+                    child: Text('  ${items.category}  '),
                   ),
                   SizedBox(
                     height: 5,
                   ),
                   SizedBox(
                     width: width * 0.4,
-                    child: Text(items[index].description,
+                    child: Text(items.description,
                         overflow: TextOverflow.ellipsis, maxLines: 2),
                   )
                 ],
@@ -88,7 +89,7 @@ class ItemCard extends StatelessWidget {
                         border: Border.all(color: Color(0xfff0c26a))),
                     child: Center(
                       child: Text(
-                        '${items[index].quantity}',
+                        '${items.amount}',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
